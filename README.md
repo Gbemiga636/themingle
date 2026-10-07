@@ -13,12 +13,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Admin: [http://localhost:3000/admin](http://localhost:3000/admin)
 
-Development login (from `.env.local`):
-
-- Email: `admin@themingle.local`
-- Password: `mingle-admin`
-
-Change these before any public deployment.
+The admin email and password live in `.env.local`. That file is not part of the repository. Set the same values in Netlify’s environment settings, and do not paste them into the code.
 
 ## What is real
 

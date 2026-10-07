@@ -1,10 +1,11 @@
 import { timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
+import { serverEnv } from "@/lib/env";
 import { addAudit, makeId, updateStore } from "@/lib/store";
 
 export async function POST(request: Request) {
-  const secret = process.env.FLUTTERWAVE_HASH;
-  if (!secret || !process.env.FLUTTERWAVE_SECRET_KEY) {
+  const secret = serverEnv("FLUTTERWAVE_HASH");
+  if (!secret || !serverEnv("FLUTTERWAVE_SECRET_KEY")) {
     return NextResponse.json({ error: "Flutterwave is not configured." }, { status: 501 });
   }
   const signature = request.headers.get("verif-hash") || "";

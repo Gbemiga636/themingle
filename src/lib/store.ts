@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { serverEnv } from "@/lib/env";
 import { createSeed } from "@/lib/seed";
 import type { Attendance, Attendee, AuditLog, Communication, Guest, Payment, PublicSite, Rsvp, Store } from "@/types/domain";
 
@@ -9,16 +10,16 @@ const TABLE = "mingle_app";
 let queue: Promise<unknown> = Promise.resolve();
 
 function remoteOn() {
-  return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  return Boolean(serverEnv("SUPABASE_URL") && serverEnv("SUPABASE_SERVICE_ROLE_KEY"));
 }
 
 async function remoteFetch(pathname: string, init?: RequestInit) {
-  const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/${pathname}`, {
+  const response = await fetch(`${serverEnv("SUPABASE_URL")}/rest/v1/${pathname}`, {
     ...init,
     cache: "no-store",
     headers: {
-      apikey: process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-      Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY || ""}`,
+      apikey: serverEnv("SUPABASE_SERVICE_ROLE_KEY"),
+      Authorization: `Bearer ${serverEnv("SUPABASE_SERVICE_ROLE_KEY")}`,
       "Content-Type": "application/json",
       ...(init?.headers as Record<string, string> | undefined),
     },

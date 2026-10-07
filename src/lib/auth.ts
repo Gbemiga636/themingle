@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { serverEnv } from "@/lib/env";
 
 const COOKIE = "mingle_admin";
 const DAY = 60 * 60 * 14;
@@ -8,7 +9,9 @@ const DAY = 60 * 60 * 14;
 export type Session = { email: string; role: "owner"; exp: number };
 
 function secret() {
-  return process.env.ADMIN_SESSION_SECRET || "dev-only-insecure-secret";
+  const value = serverEnv("ADMIN_SESSION_SECRET");
+  if (!value) throw new Error("ADMIN_SESSION_SECRET is not set");
+  return value;
 }
 
 function sign(payload: string) {
@@ -16,8 +19,8 @@ function sign(payload: string) {
 }
 
 export function expectedAdmin() {
-  const email = process.env.ADMIN_EMAIL || (process.env.NODE_ENV === "production" ? "" : "admin@themingle.local");
-  const password = process.env.ADMIN_PASSWORD || (process.env.NODE_ENV === "production" ? "" : "mingle-admin");
+  const email = serverEnv("ADMIN_EMAIL");
+  const password = serverEnv("ADMIN_PASSWORD");
   if (!email || !password) return null;
   return { email, password };
 }

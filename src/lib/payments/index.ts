@@ -1,3 +1,5 @@
+import { serverEnv } from "@/lib/env";
+
 export type CheckoutInput = {
   email: string;
   amount: number;
@@ -36,14 +38,14 @@ export const paystack: PaymentProvider = {
   id: "paystack",
   label: "Paystack",
   isConfigured() {
-    return Boolean(process.env.PAYSTACK_SECRET_KEY);
+    return Boolean(serverEnv("PAYSTACK_SECRET_KEY"));
   },
   async createCheckout(input) {
     if (!this.isConfigured()) return missing("Paystack");
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${serverEnv("PAYSTACK_SECRET_KEY")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -64,7 +66,7 @@ export const paystack: PaymentProvider = {
   async verify(reference) {
     if (!this.isConfigured()) return { ok: false, reason: "not_configured", message: "Paystack is not configured." };
     const response = await fetch(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
-      headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` },
+      headers: { Authorization: `Bearer ${serverEnv("PAYSTACK_SECRET_KEY")}` },
     });
     const json = (await response.json()) as { status?: boolean; data?: { status?: string; amount?: number; reference?: string } };
     const state = json.data?.status;
@@ -76,7 +78,7 @@ export const paystack: PaymentProvider = {
     const response = await fetch("https://api.paystack.co/refund", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        Authorization: `Bearer ${serverEnv("PAYSTACK_SECRET_KEY")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ transaction: reference }),
@@ -90,14 +92,14 @@ export const flutterwave: PaymentProvider = {
   id: "flutterwave",
   label: "Flutterwave",
   isConfigured() {
-    return Boolean(process.env.FLUTTERWAVE_SECRET_KEY);
+    return Boolean(serverEnv("FLUTTERWAVE_SECRET_KEY"));
   },
   async createCheckout(input) {
     if (!this.isConfigured()) return missing("Flutterwave");
     const response = await fetch("https://api.flutterwave.com/v3/payments", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
+        Authorization: `Bearer ${serverEnv("FLUTTERWAVE_SECRET_KEY")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -119,7 +121,7 @@ export const flutterwave: PaymentProvider = {
   async verify(reference) {
     if (!this.isConfigured()) return { ok: false, reason: "not_configured", message: "Flutterwave is not configured." };
     const response = await fetch(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${encodeURIComponent(reference)}`, {
-      headers: { Authorization: `Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}` },
+      headers: { Authorization: `Bearer ${serverEnv("FLUTTERWAVE_SECRET_KEY")}` },
     });
     const json = (await response.json()) as { data?: { status?: string; amount?: number; tx_ref?: string } };
     const state = json.data?.status;

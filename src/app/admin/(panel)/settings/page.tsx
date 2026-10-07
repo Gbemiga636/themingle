@@ -2,6 +2,7 @@ import { FieldEditor } from "@/components/admin/field-editor";
 import { providerStatus } from "@/lib/payments";
 import { formatStamp } from "@/lib/format";
 import { clearSampleData, restoreSampleData } from "@/server/actions";
+import { serverEnv } from "@/lib/env";
 import { getStore } from "@/lib/store";
 
 export default async function SettingsPage() {
@@ -21,7 +22,7 @@ export default async function SettingsPage() {
         {providers.map((provider) => (
           <p key={provider.id}>{provider.label}: {provider.configured ? "Configured" : "Not configured"}</p>
         ))}
-        <p>Email: {process.env.RESEND_API_KEY ? "Configured" : "Not configured"}</p>
+        <p>Email: {serverEnv("RESEND_API_KEY") ? "Configured" : "Not configured"}</p>
       </section>
       <section className="panel" style={{ marginBottom: "1rem" }}>
         <h2>Demonstration data</h2>

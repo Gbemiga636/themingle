@@ -26,11 +26,6 @@ export function LoginForm() {
       <button className="btn-fill" type="submit" disabled={pending}>
         {pending ? "Checking…" : "Enter"}
       </button>
-      {process.env.NODE_ENV !== "production" ? (
-        <p style={{ color: "#b7aea3", maxWidth: "36ch" }}>
-          Local defaults, unless you changed .env.local: admin@themingle.local / mingle-admin
-        </p>
-      ) : null}
     </form>
   );
 }
