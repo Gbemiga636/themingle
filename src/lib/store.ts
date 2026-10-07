@@ -17,6 +17,7 @@ async function remoteFetch(pathname: string, init?: RequestInit) {
   const response = await fetch(`${serverEnv("SUPABASE_URL")}/rest/v1/${pathname}`, {
     ...init,
     cache: "no-store",
+    signal: AbortSignal.timeout(8000),
     headers: {
       apikey: serverEnv("SUPABASE_SERVICE_ROLE_KEY"),
       Authorization: `Bearer ${serverEnv("SUPABASE_SERVICE_ROLE_KEY")}`,
@@ -90,8 +91,12 @@ async function readFile(): Promise<Store | null> {
 }
 
 async function writeFile(store: Store) {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(store, null, 2), "utf8");
+  try {
+    await fs.mkdir(path.dirname(filePath), { recursive: true });
+    await fs.writeFile(filePath, JSON.stringify(store, null, 2), "utf8");
+  } catch (error) {
+    console.error("Could not save the local store. Continuing with the in-memory copy.", error);
+  }
 }
 
 async function readLocalOrSeed() {

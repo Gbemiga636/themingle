@@ -9,13 +9,13 @@ const DAY = 60 * 60 * 14;
 export type Session = { email: string; role: "owner"; exp: number };
 
 function secret() {
-  const value = serverEnv("ADMIN_SESSION_SECRET");
-  if (!value) throw new Error("ADMIN_SESSION_SECRET is not set");
-  return value;
+  return serverEnv("ADMIN_SESSION_SECRET");
 }
 
 function sign(payload: string) {
-  return createHmac("sha256", secret()).update(payload).digest("base64url");
+  const key = secret();
+  if (!key) return "";
+  return createHmac("sha256", key).update(payload).digest("base64url");
 }
 
 export function expectedAdmin() {
@@ -37,6 +37,7 @@ export function verifyAdmin(email: string, password: string) {
 }
 
 export async function setSession(email: string) {
+  if (!secret()) throw new Error("ADMIN_SESSION_SECRET is not set");
   const exp = Date.now() + DAY * 1000;
   const payload = Buffer.from(JSON.stringify({ email, role: "owner", exp } satisfies Session)).toString("base64url");
   const token = `${payload}.${sign(payload)}`;
@@ -58,7 +59,7 @@ export async function clearSession() {
 export async function readSession(): Promise<Session | null> {
   const jar = await cookies();
   const token = jar.get(COOKIE)?.value;
-  if (!token) return null;
+  if (!token || !secret()) return null;
   const [payload, signature] = token.split(".");
   if (!payload || !signature) return null;
   const expected = sign(payload);

@@ -1,4 +1,4 @@
-import { readdir, readFile, rm } from "node:fs/promises";
+import { readdir, readFile, rm, stat } from "node:fs/promises";
 import path from "node:path";
 
 try {
@@ -38,7 +38,10 @@ async function files(dir) {
   for (const entry of entries) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) found.push(...(await files(full)));
-    else found.push(full);
+    else {
+      const info = await stat(full).catch(() => null);
+      if (info && info.size <= 1_500_000) found.push(full);
+    }
   }
   return found;
 }

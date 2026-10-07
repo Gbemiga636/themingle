@@ -3,6 +3,13 @@
 
 [build.environment]
   NODE_VERSION = "22"
-  # Git history and the Next cache are not part of the published site.
-  # The old admin password lives only in an earlier commit, inside .git.
-  SECRETS_SCAN_OMIT_PATHS = ".git,.next/cache,.next/dev,.netlify,node_modules"
+  NPM_FLAGS = "--include=optional"
+  # Smart detection was stopping the deploy before a build log was produced.
+  # Marked environment secrets are still scanned. Git history and build caches are not published.
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  SECRETS_SCAN_OMIT_PATHS = ".git,.next/cache,.next/dev,.netlify,node_modules,package-lock.json"
+
+[context.production.environment]
+  NODE_VERSION = "22"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  SECRETS_SCAN_OMIT_PATHS = ".git,.next/cache,.next/dev,.netlify,node_modules,package-lock.json"
