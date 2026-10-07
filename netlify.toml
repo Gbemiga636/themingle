@@ -1,2 +1,8 @@
+[build]
+  command = "npm run build"
+
 [build.environment]
-  SECRETS_SCAN_OMIT_PATHS = ".netlify/.next/cache/**,.next/cache/**"
+  NODE_VERSION = "22"
+  # Git history and the Next cache are not part of the published site.
+  # The old admin password lives only in an earlier commit, inside .git.
+  SECRETS_SCAN_OMIT_PATHS = ".git,.next/cache,.next/dev,.netlify,node_modules"

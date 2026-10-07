@@ -1,5 +1,7 @@
-/** Read a server secret at runtime so the bundler cannot bake the value into the build. */
+/** Read a server secret at runtime. The name stays a variable so the bundler cannot inline the value. */
 export function serverEnv(name: string) {
-  const value = process.env[name];
+  const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env;
+  if (!env) return "";
+  const value = env[name];
   return typeof value === "string" ? value.trim() : "";
 }
