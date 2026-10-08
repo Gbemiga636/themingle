@@ -27,7 +27,7 @@ export function Reveal({ children, className = "" }: { children: ReactNode; clas
       ([entry]) => {
         if (entry?.isIntersecting) node.classList.add("is-in");
       },
-      { threshold: 0.18 },
+      { threshold: 0.05, rootMargin: "0px 0px -8% 0px" },
     );
     observer.observe(node);
     return () => observer.disconnect();

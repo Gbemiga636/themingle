@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { PublicSite } from "@/types/domain";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger);
 
 export function Play({ site }: { site: PublicSite }) {
   useGSAP(() => {
@@ -19,7 +19,7 @@ export function Play({ site }: { site: PublicSite }) {
         stagger: 0.07,
         duration: 0.8,
         ease: "power3.out",
-        scrollTrigger: { trigger: ".play", start: "top 75%" },
+        scrollTrigger: { trigger: ".play", start: "top 80%", once: true },
       },
     );
   });

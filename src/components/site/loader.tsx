@@ -19,6 +19,7 @@ export function Loader() {
   if (!show) return null;
   return (
     <div className="loader" role="status" aria-live="polite">
+      <span className="spin" aria-hidden="true" />
       <strong>The Mingle</strong>
       <em>Are you ready?</em>
     </div>

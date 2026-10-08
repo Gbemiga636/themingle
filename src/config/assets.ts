@@ -16,11 +16,11 @@ const unsplash = (id: string, alt: string) => ({
 });
 
 export const assets = {
-  hero: unsplash("photo-1515934751635-c81c6bc9a2d8", "A candlelit table set for two"),
+  hero: { src: "/hero.jpeg", alt: "Guests dressed in black, laughing together at The Mingle", credit: "The Mingle" },
   heroSecondary: unsplash("photo-1518895949257-7621c3c786d7", "A single red rose"),
   about: unsplash("photo-1520854221256-17451cc331bf", "A bouquet of white flowers"),
   aboutSecondary: unsplash("photo-1496062031456-07b8f162a322", "Red roses in close detail"),
-  love: unsplash("photo-1522673607200-164d1b6ce486", "Two rings resting on a book"),
+  love: unsplash("photo-1455659817273-f96807779a8a", "A bouquet of red roses"),
   communication: unsplash("photo-1455390582262-044cdead277a", "A handwritten letter"),
   choices: unsplash("photo-1478146896981-b80fe463b330", "Candles burning on a cake"),
   marriage: unsplash("photo-1606800052052-a08af7148866", "Wedding rings"),
@@ -40,6 +40,7 @@ export const assets = {
 export type AssetKey = keyof typeof assets;
 
 export function resolveImage(value: string): Asset {
+  if (value.includes("photo-1522673607200")) return assets.love;
   if (value.startsWith("asset:")) {
     const key = value.slice(6) as AssetKey;
     return assets[key] ?? { src: "", alt: "", credit: "" };

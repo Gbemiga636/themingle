@@ -92,7 +92,13 @@ export function RsvpForm({ site }: { site: PublicSite }) {
       </label>
       {error ? <p className="error">{error}</p> : null}
       <button className="btn-fill" type="submit" disabled={form.formState.isSubmitting} data-cursor="rsvp">
-        {form.formState.isSubmitting ? "Saving…" : "I’m ready to mingle"}
+        {form.formState.isSubmitting ? (
+          <>
+            <span className="spin" aria-hidden="true" /> Saving
+          </>
+        ) : (
+          "I’m ready to mingle"
+        )}
       </button>
     </form>
   );

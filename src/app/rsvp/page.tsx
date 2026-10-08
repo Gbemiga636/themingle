@@ -1,7 +1,6 @@
 import { PublicFrame } from "@/components/site/frame";
 import { RsvpForm } from "@/components/rsvp/form";
 import { getPublicSite, getStore } from "@/lib/store";
-import { formatVenue, formatWhen } from "@/lib/format";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -12,18 +11,19 @@ export default async function RsvpPage() {
   return (
     <PublicFrame>
       <main className="rsvp-page">
-        <div>
+        <div className="rsvp-intro">
           <p className="eyebrow">The list</p>
-          <h1 className="display">I’m ready to mingle.</h1>
-          <p style={{ maxWidth: "36ch", lineHeight: 1.6, color: "rgba(243,238,230,0.75)" }}>
-            {site.event.description}
-          </p>
-          <p className="hero-meta">
-            <span>{formatWhen(site.event.date, site.event.time)}</span>
-            <span>{formatVenue(site.event.venue, site.event.city)}</span>
-          </p>
+          <h1 className="display">
+            I’m ready
+            <br />
+            <em>to mingle.</em>
+          </h1>
         </div>
-        <RsvpForm site={site} />
+        <div className="rsvp-card">
+          <p className="eyebrow">Save your place</p>
+          <h2>Tell us you’re coming.</h2>
+          <RsvpForm site={site} />
+        </div>
       </main>
     </PublicFrame>
   );

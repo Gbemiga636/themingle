@@ -167,7 +167,13 @@ export function MusicGate() {
               want to enter?
             </h1>
             <p className="enter-copy">
-              {playerReady ? "Pick a song and it stays in the background. Or come in quietly." : "The music is warming up."}
+              {playerReady ? (
+                "Pick a song and it stays in the background. Or come in quietly."
+              ) : (
+                <span className="warming">
+                  <span className="spin" aria-hidden="true" /> The music is warming up.
+                </span>
+              )}
             </p>
             <div className="enter-songs">
               {songs.map((item) => (
@@ -214,18 +220,24 @@ export function MusicGate() {
       ) : null}
 
       {!admin && choice?.mode === "quiet" ? (
-        <div className="soundbar">
+        <div className="soundbar is-quiet">
           {picker ? (
             <div className="sound-list" role="menu" aria-label="Choose a song">
               {songs.map((item) => (
-                <button key={item.id} type="button" role="menuitem" onClick={() => play(item, true)}>
+                <button key={item.id} type="button" role="menuitem" disabled={!playerReady} onClick={() => play(item, true)}>
                   <strong>{item.title}</strong>
                   <small>{item.artist}</small>
                 </button>
               ))}
+              {!playerReady ? (
+                <p className="warming">
+                  <span className="spin" aria-hidden="true" /> Warming up
+                </p>
+              ) : null}
             </div>
           ) : null}
           <button type="button" onClick={() => setPicker((open) => !open)} aria-expanded={picker}>
+            {picker && !playerReady ? <span className="spin" aria-hidden="true" /> : null}
             Choose a song
           </button>
         </div>

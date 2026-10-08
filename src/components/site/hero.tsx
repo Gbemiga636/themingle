@@ -13,7 +13,7 @@ const HeroCanvas = dynamic(() => import("@/components/site/hero-canvas"), { ssr:
 
 export function Hero({ site }: { site: PublicSite }) {
   const { hero } = site.content;
-  const image = resolveImage(hero.image);
+  const image = { src: "/hero.jpeg", alt: "Guests dressed in black, laughing together at The Mingle" };
   const secondary = resolveImage("asset:heroSecondary");
   const [canvas, setCanvas] = useState(false);
 
