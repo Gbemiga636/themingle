@@ -8,8 +8,11 @@
   # Marked environment secrets are still scanned. Git history and build caches are not published.
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
   SECRETS_SCAN_OMIT_PATHS = ".git,.next/cache,.next/dev,.netlify,node_modules,package-lock.json"
+  # This URL is public. Next.js copies it into the site, so it must not be treated as a secret.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SITE_URL"
 
 [context.production.environment]
   NODE_VERSION = "22"
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
   SECRETS_SCAN_OMIT_PATHS = ".git,.next/cache,.next/dev,.netlify,node_modules,package-lock.json"
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SITE_URL"
