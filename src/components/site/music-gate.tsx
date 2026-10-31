@@ -46,7 +46,7 @@ export function MusicGate() {
   const [choice, setChoice] = useState<Choice | null>(null);
   const [playing, setPlaying] = useState(false);
   const [picker, setPicker] = useState(false);
-  const admin = pathname.startsWith("/admin");
+  const admin = pathname.startsWith("/admin") || pathname.startsWith("/mingle/dashiledhamper");
 
   useEffect(() => {
     setChoice(readChoice());
